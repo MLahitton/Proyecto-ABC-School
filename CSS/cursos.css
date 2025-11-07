@@ -1,0 +1,28 @@
+h2{
+    justify-self: center;
+    font-size: 4rem;
+    border: 2px solid green;
+    padding: 20px;
+    border-radius: 15px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+form button{
+    align-self: center;
+    padding: 10px 30px;
+    min-width: 150px;
+}
+textarea{
+    margin-left: 100px;
+}
+input{
+    margin-left: 100px;
+}
+
+
+
+

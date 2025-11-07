@@ -1,0 +1,89 @@
+*{
+    padding:0px;
+    margin:0px;
+    box-sizing: border-box;
+}
+:root {
+  --color-primario: #1E88E5;
+  --color-secundario: #43A047;
+  --color-acento: #FFC107;
+  --color-fondo: #F5F7FA;
+  --color-contenedor: #FFFFFF;
+  --color-texto: #212121;
+  --color-texto-secundario: #616161;
+  --color-borde: #E0E0E0;
+  --color-error: #E53935;
+  --color-exito: #4CAF50;
+}
+
+body{
+    overflow-x: hidden;
+}
+
+
+nav{
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(178, 204, 213);
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+}
+.menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 210px;
+    margin-left: 30px;
+
+    
+
+}
+a{
+    color: black;
+    text-decoration: none;
+}
+
+.logo{
+    height: 60px;
+}
+.banner{
+    height: 300px;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: row;
+    margin: 40px;
+
+}
+
+
+.text-banner{
+    width: 90vw;
+    margin-right: 20px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px;
+    border: var(--color-acento) 2px solid;
+}
+
+.text-banner p{
+    margin-bottom: 0;
+}
+
+.login{
+    margin-left: 400px;
+    border: var(--color-primario) solid;
+    padding: 20px;
+    border-radius: 30px;
+    background-color: #1E88E5;
+}
+
+
+
+
+
