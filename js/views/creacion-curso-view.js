@@ -16,7 +16,7 @@ export function crearCursoView() {
       alert("Curso creado: " + nuevo.nombre);
       form.reset();
     });
-  }, 0);
+  }, 0);A
 
   return `
     <h2>Crear nuevo curso</h2>

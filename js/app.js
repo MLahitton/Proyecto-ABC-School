@@ -1,25 +1,100 @@
 import { homeView } from "./views/home-view.js";
 import { loginView } from "./views/login-view.js";
 import { dashboardview } from "./views/dashboard-view.js";
-import { crearCursoView } from "./views/creacion-curso-view.js";
+import { studentsView } from "./views/students-view.js";
+import { studentsCreateView, initStudentsCreateLogic } from "./views/students-create-view.js";
+import { coursesView, initCoursesListLogic } from "./views/courses-view.js";
+import { coursesCreateView, initCoursesCreateLogic } from "./views/courses-create-view.js";
+import { coursesEditView, initCoursesEditLogic } from "./views/courses-edit-view.js";
 
 const routes = {
   "#/": homeView,
   "#/home": homeView,
   "#/login": loginView,
-  "#/dasboard": dashboardview,
-  "#/crear-curso": crearCursoView,
+  "#/dashboard": dashboardview,
+  // students
+  "#/students": studentsView,
+  "#/alumnos": studentsView,
+  "#/students/new": studentsCreateView,
+  "#/alumnos/new": studentsCreateView,
+  // courses
+  "#/courses": coursesView,
+  "#/cursos": coursesView,
+  "#/courses/new": coursesCreateView,
+  "#/crear-curso": coursesCreateView,
+  "#/courses/edit": coursesEditView, // ruta base; admite query param ?id=...
   // más rutas...
 };
 
+/**
+ * normalize hash to ignore query params when looking up the route.
+ * Ej: "#/courses/edit?id=c_123" -> "#/courses/edit"
+ */
+function baseHash(hash) {
+  if (!hash) return hash;
+  const q = hash.indexOf("?");
+  return q === -1 ? hash : hash.slice(0, q);
+}
+
 function renderView(hash) {
-  const view = routes[hash] || (() => "<h2>404: Página no encontrada</h2>");
+  const bHash = baseHash(hash);
+  const view = routes[bHash] || (() => "<h2>404: Página no encontrada</h2>");
+  // 1) Renderizar la vista
   document.getElementById("app").innerHTML = view();
 
-  if (hash === "#/login") {
+  // 2) Lógica que debe ejecutarse DESPUÉS de renderizar la vista
+
+  if (bHash === "#/login") {
     agregarLogicaDeLogin();
   }
+
+  // students list
+  if (bHash === "#/students" || bHash === "#/alumnos") {
+    const input = document.getElementById("students-search") || document.getElementById("alumnos-search");
+    if (input) {
+      input.addEventListener("input", () => {
+        const q = input.value.trim().toLowerCase();
+        document.querySelectorAll(".student-item, .alumno-item").forEach(item => {
+          const nombreEl = item.querySelector(".student-name, .alumno-nombre");
+          const nombre = nombreEl ? nombreEl.textContent.toLowerCase() : "";
+          item.style.display = nombre.includes(q) ? "" : "none";
+        });
+      });
+    }
+  }
+
+  // create student form
+  if (bHash === "#/students/new" || bHash === "#/alumnos/new") {
+    initStudentsCreateLogic();
+  }
+
+  // courses list + init its logic (delete handlers, etc.)
+  if (bHash === "#/courses" || bHash === "#/cursos") {
+    const input = document.getElementById("courses-search");
+    if (input) {
+      input.addEventListener("input", () => {
+        const q = input.value.trim().toLowerCase();
+        document.querySelectorAll(".course-item").forEach(item => {
+          const nombre = item.querySelector(".course-name")?.textContent.toLowerCase() || "";
+          item.style.display = nombre.includes(q) ? "" : "none";
+        });
+      });
+    }
+    // inicializar lógica de la lista de cursos (eliminar, etc.)
+    initCoursesListLogic();
+  }
+
+  // create course form
+  if (bHash === "#/courses/new" || bHash === "#/crear-curso") {
+    initCoursesCreateLogic();
+  }
+
+  // edit course form (ruta con query param ?id=)
+  if (bHash === "#/courses/edit") {
+    initCoursesEditLogic();
+  }
 }
+
 
 function agregarLogicaDeLogin() {
   const form = document.getElementById("login-form");
@@ -29,10 +104,11 @@ function agregarLogicaDeLogin() {
       const usuario = form.usuario.value.trim();
       const password = form.password.value.trim();
       if (usuario === "admin" && password === "1234") {
-        localStorage.setItem("adminLogin", "true"); 
-        location.hash = "#/dasboard"; 
+        localStorage.setItem("adminLogin", "true");
+        location.hash = "#/dashboard";
       } else {
-        document.getElementById("login-error").style.display = "block";
+        const errEl = document.getElementById("login-error");
+        if (errEl) errEl.style.display = "block";
       }
     });
   }
