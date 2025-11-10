@@ -6,6 +6,7 @@ import { studentsCreateView, initStudentsCreateLogic } from "./views/students-cr
 import { coursesView, initCoursesListLogic } from "./views/courses-view.js";
 import { coursesCreateView, initCoursesCreateLogic } from "./views/courses-create-view.js";
 import { coursesEditView, initCoursesEditLogic } from "./views/courses-edit-view.js";
+import "./components/course-card.js";
 
 const routes = {
   "#/": homeView,
@@ -22,14 +23,11 @@ const routes = {
   "#/cursos": coursesView,
   "#/courses/new": coursesCreateView,
   "#/crear-curso": coursesCreateView,
-  "#/courses/edit": coursesEditView, // ruta base; admite query param ?id=...
+  "#/courses/edit": coursesEditView, 
   // más rutas...
 };
 
-/**
- * normalize hash to ignore query params when looking up the route.
- * Ej: "#/courses/edit?id=c_123" -> "#/courses/edit"
- */
+
 function baseHash(hash) {
   if (!hash) return hash;
   const q = hash.indexOf("?");
@@ -39,16 +37,13 @@ function baseHash(hash) {
 function renderView(hash) {
   const bHash = baseHash(hash);
   const view = routes[bHash] || (() => "<h2>404: Página no encontrada</h2>");
-  // 1) Renderizar la vista
   document.getElementById("app").innerHTML = view();
 
-  // 2) Lógica que debe ejecutarse DESPUÉS de renderizar la vista
 
   if (bHash === "#/login") {
     agregarLogicaDeLogin();
   }
 
-  // students list
   if (bHash === "#/students" || bHash === "#/alumnos") {
     const input = document.getElementById("students-search") || document.getElementById("alumnos-search");
     if (input) {
@@ -63,12 +58,10 @@ function renderView(hash) {
     }
   }
 
-  // create student form
   if (bHash === "#/students/new" || bHash === "#/alumnos/new") {
     initStudentsCreateLogic();
   }
 
-  // courses list + init its logic (delete handlers, etc.)
   if (bHash === "#/courses" || bHash === "#/cursos") {
     const input = document.getElementById("courses-search");
     if (input) {
@@ -80,16 +73,13 @@ function renderView(hash) {
         });
       });
     }
-    // inicializar lógica de la lista de cursos (eliminar, etc.)
     initCoursesListLogic();
   }
 
-  // create course form
   if (bHash === "#/courses/new" || bHash === "#/crear-curso") {
     initCoursesCreateLogic();
   }
 
-  // edit course form (ruta con query param ?id=)
   if (bHash === "#/courses/edit") {
     initCoursesEditLogic();
   }

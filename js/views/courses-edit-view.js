@@ -1,9 +1,7 @@
 import { mostrarBarraNavegacion } from "../helpers/navBar.js";
 import { getCourseById, updateCourse } from "../helpers/courses-storage.js";
 
-/**
- * Helper para leer teachers/students desde localStorage (para poblar selects)
- */
+
 function readTeachersFromStorage() {
   const raw = localStorage.getItem("teachers") || localStorage.getItem("profesores");
   try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
@@ -13,9 +11,7 @@ function readStudentsFromStorage() {
   try { return raw ? JSON.parse(raw) : []; } catch (e) { return []; }
 }
 
-/**
- * Extrae query param 'id' de location.hash (forma: #/courses/edit?id=...)
- */
+
 function getQueryId() {
   const hash = location.hash || "";
   const qIndex = hash.indexOf("?");
@@ -24,9 +20,7 @@ function getQueryId() {
   return query.get("id");
 }
 
-/**
- * Vista (template) para editar un curso. El HTML se renderiza antes de poblar los campos.
- */
+
 export function coursesEditView() {
   return `
     ${mostrarBarraNavegacion()}
@@ -71,10 +65,7 @@ export function coursesEditView() {
   `;
 }
 
-/**
- * Inicializa la lógica del formulario de edición (poblar select, cargar datos del curso, submit).
- * Debe llamarse DESPUÉS de renderizar la vista (desde renderView en app.js).
- */
+
 export function initCoursesEditLogic() {
   const courseId = getQueryId();
   if (!courseId) {
@@ -119,18 +110,15 @@ export function initCoursesEditLogic() {
   idInput.value = course.id || "";
   document.getElementById("course-name").value = course.nombre || course.name || "";
   if (course.teacherId) teacherSelect.value = course.teacherId;
-  // marcar alumnos seleccionados si existen studentIds
   if (Array.isArray(course.studentIds) && course.studentIds.length) {
     Array.from(studentsSelect.options).forEach(opt => {
       if (course.studentIds.includes(opt.value)) opt.selected = true;
     });
   } else if (Array.isArray(course.alumnos) && course.alumnos.length) {
-    // si el curso almacenaba nombres como 'alumnos', marcar por nombre
     Array.from(studentsSelect.options).forEach(opt => {
       if (course.alumnos.includes(opt.textContent.split(" — ")[0])) opt.selected = true;
     });
   }
-  // modules -> input as comma separated
   const modulesRaw = Array.isArray(course.modules) ? course.modules.join(", ") : (Array.isArray(course.modulos) ? course.modulos.join(", ") : "");
   document.getElementById("course-modules").value = modulesRaw;
 

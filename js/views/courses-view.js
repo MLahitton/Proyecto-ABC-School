@@ -1,9 +1,7 @@
 import { mostrarBarraNavegacion } from "../helpers/navBar.js";
 import { removeCourse } from "../helpers/courses-storage.js";
 
-/**
- * Lee colección desde localStorage (soporta 'courses' o 'cursos').
- */
+
 function readCoursesRaw() {
   const raw = localStorage.getItem("courses") || localStorage.getItem("cursos");
   if (!raw) return [];
@@ -16,9 +14,7 @@ function readCoursesRaw() {
   }
 }
 
-/**
- * Lee teachers/professores para resolver nombres cuando los cursos guardan teacherId.
- */
+
 function readTeachersRaw() {
   const raw = localStorage.getItem("teachers") || localStorage.getItem("profesores");
   if (!raw) return [];
@@ -31,15 +27,11 @@ function readTeachersRaw() {
   }
 }
 
-/**
- * Normaliza y devuelve la lista de cursos listos para render.
- * Cada curso resultante tiene: { id, nombre, teacherName, studentCount, studentIds, studentsPreview, modules }
- */
+
 function getCoursesFromStorage() {
   const rawCourses = readCoursesRaw();
   const teachers = readTeachersRaw();
 
-  // mapa id -> nombre de teacher
   const teacherIdToName = {};
   teachers.forEach(t => {
     if (t && t.id) teacherIdToName[t.id] = t.name || t.nombre || String(t.id);
@@ -48,7 +40,6 @@ function getCoursesFromStorage() {
   return rawCourses.map(c => {
     const id = c.id || (c.nombre ? c.nombre.trim().replace(/\s+/g, "_").toLowerCase() : null);
     const nombre = c.nombre || c.name || "Curso sin nombre";
-    // Resolver teacherName: puede venir como teacherName/profesor o como teacherId
     let teacherName = null;
     if (c.teacherName || c.profesor) {
       teacherName = c.teacherName || c.profesor;
@@ -56,7 +47,6 @@ function getCoursesFromStorage() {
       teacherName = teacherIdToName[c.teacherId] || c.teacherId;
     }
 
-    // estudiantes: puede ser studentIds (ids) o students/alumnos (nombres)
     const studentIds = Array.isArray(c.studentIds) ? c.studentIds.slice() : [];
     const studentsArr = Array.isArray(c.students) ? c.students.slice() : (Array.isArray(c.alumnos) ? c.alumnos.slice() : []);
     const studentCount = studentIds.length || studentsArr.length || 0;
@@ -75,9 +65,7 @@ function getCoursesFromStorage() {
   });
 }
 
-/**
- * Template de la vista de cursos.
- */
+
 export function coursesView() {
   const courses = getCoursesFromStorage();
 
@@ -109,17 +97,9 @@ export function coursesView() {
   `;
 }
 
-/**
- * Inicializa la lógica de la lista de cursos:
- * - manejador para los botones "Eliminar"
- * - re-render forzado vía dispatch de hashchange después de eliminar
- *
- * Llamar DESPUÉS de renderizar la vista (desde renderView en app.js).
- */
+
 export function initCoursesListLogic() {
-  // bind delete buttons
   document.querySelectorAll(".btn-delete").forEach(btn => {
-    // evitar doble binding si se vuelve a inicializar
     btn.removeEventListener && btn.removeEventListener("click", () => {});
     btn.addEventListener("click", (e) => {
       const id = btn.getAttribute("data-id");
@@ -129,7 +109,6 @@ export function initCoursesListLogic() {
       try {
         const ok = removeCourse(id);
         if (ok) {
-          // Re-render: dispatch de hashchange para que app.js vuelva a llamar renderView
           window.dispatchEvent(new Event("hashchange"));
         } else {
           alert("No se encontró el curso para eliminar.");
@@ -141,5 +120,4 @@ export function initCoursesListLogic() {
     });
   });
 
-  // (La edición se activa navegando a #/courses/edit?id=ID por el enlace 'Editar')
 }

@@ -17,7 +17,7 @@ function getStudentsFromStorage() {
         }
 
         return parsed.map(s => {
-          const name = s.name || s.nombre || "";
+          const name = s.name || "";
           let cursos = [];
           if (Array.isArray(s.cursos) && s.cursos.length) {
             cursos = s.cursos.slice();

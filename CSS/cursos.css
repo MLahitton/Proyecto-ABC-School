@@ -1,28 +1,280 @@
-h2{
-    justify-self: center;
-    font-size: 4rem;
-    border: 2px solid green;
-    padding: 20px;
-    border-radius: 15px;
-}
-form{
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
+/* styles.css — Paleta orientada a azul
+   Guarda en css/styles.css y enlaza en index.html
+   Variables, layout, navbar, grids, tarjetas, listas, formularios.
+*/
+
+/* --------------------
+   Variables y reset (colores orientados a azul)
+   -------------------- */
+:root{
+  --bg: #f0f6ff;            /* suave fondo azul claro */
+  --card-bg: #ffffff;
+  --muted: #6b7a99;         /* gris azulado */
+  --text: #0b2545;          /* azul oscuro para texto */
+  --primary: #2563eb;       /* azul vibrante (primary) */
+  --primary-600: #1e4fd6;
+  --accent: #0ea5e9;        /* azul claro/acento */
+  --danger: #b91c1c;
+  --border: #e6eefb;        /* borde ligeramente azulado */
+  --glass: rgba(6,37,77,0.04);
+  --radius: 10px;
+  --gap: 1rem;
+  --max-width: 1100px;
+  --container-padding: 1.25rem;
+  --shadow: 0 6px 18px rgba(11,37,69,0.06);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-form button{
-    align-self: center;
-    padding: 10px 30px;
-    min-width: 150px;
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;}
+img{max-width:100%; display:block}
+
+/* --------------------
+   Layout
+   -------------------- */
+.app-container{
+  max-width:var(--max-width);
+  margin:0 auto;
+  padding: var(--container-padding);
 }
-textarea{
-    margin-left: 100px;
+
+/* --------------------
+   Navbar
+   -------------------- */
+nav, .navbar-dashboard {
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:0.75rem var(--container-padding);
+  background: linear-gradient(90deg, rgba(37,99,235,0.08), rgba(14,165,233,0.04));
+  box-shadow: var(--shadow);
 }
-input{
-    margin-left: 100px;
+nav .logo, .logo-navbar {
+  width:120px;
+  height:auto;
+  object-fit:contain;
+  border-radius:6px;
+  background:white;
+  padding:6px;
+  border: 1px solid rgba(14,165,233,0.12);
+}
+nav .menu, .navbar-links {
+  display:flex;
+  gap:0.75rem;
+  margin-left:0.5rem;
+  align-items:center;
+}
+nav .menu a, .navbar-links a {
+  color: var(--primary-600);
+  text-decoration:none;
+  font-weight:600;
+  padding:0.25rem 0.5rem;
+  border-radius:6px;
+}
+nav .menu a:hover, nav .menu a:focus { background: rgba(14,165,233,0.06); }
+
+nav .login { margin-left:auto; }
+nav .login a { color: var(--primary); text-decoration:none; font-weight:700; }
+
+/* --------------------
+   Hero / Banner
+   -------------------- */
+.banner{
+  margin:1rem 0;
+  background: linear-gradient(180deg, rgba(37,99,235,0.06) 0%, rgba(14,165,233,0.03) 100%);
+  border-radius: var(--radius);
+  padding:1rem;
+  box-shadow: var(--shadow);
+}
+.text-banner h3{ margin:0 0 0.5rem 0; font-size:1.6rem; color: var(--primary-600); }
+.text-banner p{ margin:0.4rem 0; color:var(--muted); line-height:1.45; font-size:0.95rem;}
+
+/* --------------------
+   Sections / headers
+   -------------------- */
+section h2 {
+  font-size:1.3rem;
+  margin:1rem 0 0.6rem 0;
+  color:var(--text);
 }
 
+/* --------------------
+   Grids: cursos y profesores
+   -------------------- */
+.grid-profesores, .grid-cursos, .courses-grid {
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap:1rem;
+  align-items:start;
+}
 
+/* Tarjeta profesor simple */
+.card-profesor{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  padding:0.8rem;
+  border-radius:10px;
+  box-shadow: var(--shadow);
+}
+.card-profesor strong{ display:block; margin-bottom:0.25rem; color:var(--primary-600); }
+.card-profesor p{ margin:0; color:var(--muted); font-size:0.95rem; }
 
+/* Tarjeta de curso (para fallback si no usas web component) */
+.card-curso{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  padding:0.9rem;
+  border-radius:10px;
+  box-shadow: var(--shadow);
+}
+.card-curso strong{ display:block; margin-bottom:0.35rem; color:var(--primary-600); }
+.card-curso p{ margin:0; color:var(--muted); font-size:0.95rem }
 
+/* --------------------
+   Courses / Students lists (vistas)
+   -------------------- */
+.courses-main, .students-main {
+  padding:1rem 0;
+}
+.courses-header, .students-header {
+  display:flex;
+  align-items:center;
+  gap:0.75rem;
+  margin-bottom:0.75rem;
+}
+.courses-header h2, .students-header h2 { margin:0; font-size:1.6rem; flex: 1; text-align:center; color:var(--primary-600); }
+.courses-header input, .students-header input {
+  padding:0.45rem 0.6rem;
+  border-radius:6px;
+  border:1px solid var(--border);
+  min-width:180px;
+}
+
+/* Lista clásica de cursos (si no usas course-card) */
+.courses-list, .students-list {
+  display:flex;
+  flex-direction:column;
+  gap:0.8rem;
+}
+.course-item, .student-item {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  padding:0.9rem;
+  border-radius:10px;
+  box-shadow: var(--shadow);
+}
+.course-item .course-name, .student-item .student-name {
+  margin:0 0 0.3rem 0;
+  font-weight:700;
+  color:var(--primary-600);
+}
+.course-item p, .student-item p { margin:0.15rem 0; color:var(--muted) }
+
+/* Actions (edit/delete/create links) */
+.course-actions, .item-actions {
+  display:flex;
+  gap:0.5rem;
+  margin-top:0.6rem;
+}
+
+/* --------------------
+   Buttons
+   -------------------- */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  gap:0.4rem;
+  padding:0.45rem 0.7rem;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#fff;
+  color:var(--text);
+  cursor:pointer;
+  font-weight:600;
+  font-size:0.95rem;
+}
+.btn:hover { transform:translateY(-1px); box-shadow: 0 6px 18px rgba(16,24,40,0.04); }
+.btn:active { transform:translateY(0); }
+.btn-primary, .btn-edit { background:var(--primary); color:white; border-color: rgba(0,0,0,0.06); }
+.btn-primary:hover, .btn-edit:hover { background:var(--primary-600); }
+.btn-danger, .btn-delete { background:#fff5f5; color:var(--danger); border-color:#fecaca; }
+
+/* Links that look like buttons */
+.link-btn {
+  text-decoration:none;
+  display:inline-block;
+  padding:0.35rem 0.6rem;
+  border-radius:8px;
+  color:var(--primary);
+  font-weight:700;
+}
+
+/* --------------------
+   Forms
+   -------------------- */
+form.course-form, form.student-form {
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  padding:1rem;
+  border-radius:10px;
+  box-shadow: var(--shadow);
+  max-width:720px;
+}
+form label { display:block; font-weight:600; margin-bottom:0.25rem; font-size:0.95rem; color:var(--primary-600) }
+form input[type="text"], form input[type="search"], form input[type="date"], form select, form textarea {
+  width:100%;
+  padding:0.5rem 0.6rem;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background: #fff;
+  margin-bottom:0.6rem;
+}
+form .row { display:flex; gap:0.75rem; }
+form .row > * { flex:1; }
+
+/* --------------------
+   Empty / no-data
+   -------------------- */
+.no-data, .no-courses, .no-students {
+  padding:0.8rem;
+  text-align:center;
+  color:var(--muted);
+  background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+  border-radius:8px;
+  border:1px dashed var(--border);
+}
+
+/* --------------------
+   Course-card host (si usas el custom element)
+   -------------------- */
+course-card {
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+/* Wrapper para grid items (ayuda con alineación) */
+.course-wrapper {
+  display:flex;
+  align-items:stretch;
+}
+
+/* --------------------
+   Responsive
+   -------------------- */
+@media (max-width:800px){
+  nav, .navbar-dashboard { flex-direction:column; align-items:flex-start; gap:0.5rem; padding:0.6rem; }
+  nav .menu { flex-wrap:wrap; }
+  .text-banner h3 { font-size:1.25rem; }
+  .grid-profesores, .grid-cursos { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+}
+
+/* --------------------
+   Small utilities
+   -------------------- */
+.muted { color:var(--muted) }
+.kv { font-weight:700; margin-right:0.5rem }
+.center { text-align:center }
+.hidden { display:none !important }
+.mb-1 { margin-bottom:0.5rem }
+.mt-1 { margin-top:0.5rem }

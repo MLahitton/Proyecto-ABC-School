@@ -1,9 +1,7 @@
 import { mostrarBarraNavegacion } from "../helpers/navBar.js";
 import { addCourse } from "../helpers/courses-storage.js";
 
-/**
- * Helpers locales para leer teachers/students desde localStorage (soporta claves en inglés/español)
- */
+
 function readTeachersFromStorage() {
   const raw = localStorage.getItem("teachers") || localStorage.getItem("profesores");
   try {
@@ -24,9 +22,7 @@ function readStudentsFromStorage() {
   }
 }
 
-/**
- * Vista (template) para crear un curso
- */
+
 export function coursesCreateView() {
   return `
     ${mostrarBarraNavegacion()}
@@ -72,10 +68,7 @@ export function coursesCreateView() {
   `;
 }
 
-/**
- * Inicializa la lógica del formulario de creación de curso.
- * Debe llamarse DESPUÉS de renderizar la vista (p. ej. desde renderView en app.js).
- */
+
 export function initCoursesCreateLogic() {
   const form = document.getElementById("course-form");
   if (!form) return;
@@ -113,7 +106,6 @@ export function initCoursesCreateLogic() {
   }
 
   cancelBtn?.addEventListener("click", () => {
-    // Redirige a la lista de cursos
     location.hash = "#/courses";
   });
 
@@ -122,9 +114,7 @@ export function initCoursesCreateLogic() {
 
     const nombre = (form.nombre.value || "").trim();
     const teacherId = form.teacher.value || null;
-    // students select: recoger valores seleccionados
     const selectedStudentIds = Array.from(studentsSelect.selectedOptions).map(o => o.value).filter(Boolean);
-    // modules: parsear por coma y limpiar
     const modulesRaw = (form.modules.value || "").trim();
     const modules = modulesRaw ? modulesRaw.split(",").map(m => m.trim()).filter(Boolean) : [];
 
@@ -146,7 +136,6 @@ export function initCoursesCreateLogic() {
       const newCourse = addCourse(courseData);
       showMessage(`Curso creado: ${newCourse.nombre} (id: ${newCourse.id})`, "success");
       form.reset();
-      // Espera breve y redirige a la lista de cursos
       setTimeout(() => {
         location.hash = "#/courses";
       }, 700);

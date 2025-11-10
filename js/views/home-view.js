@@ -1,37 +1,39 @@
-export function homeView() {
-  // Datos simulados
-  const profesores = [
-    { nombre: "María López", especialidad: "Matemáticas" },
-    { nombre: "Juan Pérez", especialidad: "Ciencias" },
-    { nombre: "Sofía García", especialidad: "Historia" }
-  ];
-  const cursos = [
-    { nombre: "Álgebra Básica", docente: "María López" },
-    { nombre: "Química 101", docente: "Juan Pérez" },
-    { nombre: "Historia Antigua", docente: "Sofía García" }
-  ];
+import "../components/course-card.js";
 
+const profesores = [
+  { nombre: "María López", especialidad: "Matemáticas" },
+  { nombre: "Juan Pérez", especialidad: "Ciencias" },
+  { nombre: "Sofía García", especialidad: "Historia" }
+];
+
+const cursosSimulados = [
+  { id: "c_sim_1", nombre: "Álgebra Básica", docente: "María López", modules: ["Álgebra I", "Ecuaciones"] },
+  { id: "c_sim_2", nombre: "Química 101", docente: "Juan Pérez", modules: ["Materia", "Reacciones"] },
+  { id: "c_sim_3", nombre: "Historia Antigua", docente: "Sofía García", modules: ["Antiguo Oriente", "Grecia"] }
+];
+
+export function homeView() {
   return `
     <nav>
-      <img src="assets/Logo.png" class="logo">
+      <img src="assets/Logo.png" class="logo" alt="Logo">
       <div class="menu">
         <a href="#">Poner los href</a>
-        <a href="#">Courses</a>
-        <a href="#">Trainers</a>
-        <a href="#">Contact</a>
+        <a href="#/courses">Courses</a>
+        <a href="#/teachers">Trainers</a>
+        <a href="#/contact">Contact</a>
       </div>
       <div class="login">
         <a href="#/login">Login </a>
       </div>
     </nav>
+
     <div class="banner">
       <div class="text-banner">
         <h3>Nuestra historia</h3>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit..."</p>
       </div>        
     </div>
+
     <section class="listados-home">
       <h2>Profesores</h2>
       <div class="grid-profesores">
@@ -42,15 +44,54 @@ export function homeView() {
           </div>
         `).join("")}
       </div>
+
       <h2>Cursos</h2>
-      <div class="grid-cursos">
-        ${cursos.map(c => `
-          <div class="card-curso">
-            <strong>${c.nombre}</strong>
-            <p>Docente: ${c.docente}</p>
-          </div>
-        `).join("")}
-      </div>
+      <div id="home-courses-container" class="grid-cursos"></div>
     </section>
   `;
+}
+
+export function initHomeLogic() {
+  const container = document.getElementById("home-courses-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  let stored = null;
+  try {
+    const raw = localStorage.getItem("courses") || localStorage.getItem("cursos");
+    stored = raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    stored = null;
+  }
+
+  const isStoredArray = Array.isArray(stored) && stored.length > 0;
+  const coursesToRender = isStoredArray ? stored : cursosSimulados;
+
+  coursesToRender.forEach(c => {
+    const card = document.createElement("course-card");
+
+    if (isStoredArray) {
+      if (c && c.id) {
+        card.setAttribute("course-id", c.id);
+      } else {
+        card.course = {
+          id: c.id || "",
+          nombre: c.nombre || c.name || "",
+          modules: c.modules || c.modulos || []
+        };
+      }
+    } else {
+      card.course = {
+        id: c.id || "",
+        nombre: c.nombre || c.name || "",
+        modules: c.modules || c.modulos || []
+      };
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "course-wrapper";
+    wrapper.appendChild(card);
+    container.appendChild(wrapper);
+  });
 }

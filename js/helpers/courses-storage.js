@@ -25,10 +25,7 @@ export function saveCourses(courses) {
   writeCollection("cursos", courses);
 }
 
-/**
- * Genera un id para curso: prefijo 'c_' + slug(nombre) + '_' + timestamp base36
- * Ej: "Matemáticas Avanzadas" -> "c_matematicas-avanzadas_kx1a9"
- */
+
 export function generateCourseId(nombre = "") {
   const slug = String(nombre || "curso")
     .trim()
@@ -36,16 +33,11 @@ export function generateCourseId(nombre = "") {
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9\-]/g, "")
     .slice(0, 40) || "curso";
-  const ts = Date.now().toString(36);
-  return `c_${slug}_${ts}`;
+ 
+  return `c_${slug}`;
 }
 
-/**
- * Añade un curso.
- * course: { id?, nombre, teacherId?, studentIds?, modules? }
- * Devuelve el curso creado.
- * Lanza error si ya existe un id duplicado (por seguridad).
- */
+
 export function addCourse(course = {}) {
   const courses = readCourses();
   const id = course.id || generateCourseId(course.nombre || course.name || "curso");
@@ -68,10 +60,7 @@ export function addCourse(course = {}) {
   return newCourse;
 }
 
-/**
- * Actualiza un curso por id. patch puede contener campos a reemplazar/añadir.
- * Devuelve el curso actualizado o null si no existe.
- */
+
 export function updateCourse(id, patch = {}) {
   const courses = readCourses();
   const idx = courses.findIndex(c => c.id === id);
@@ -81,10 +70,7 @@ export function updateCourse(id, patch = {}) {
   return courses[idx];
 }
 
-/**
- * Elimina un curso por id.
- * Devuelve true si se borró, false si no se encontró.
- */
+
 export function removeCourse(id) {
   let courses = readCourses();
   const before = courses.length;
@@ -93,12 +79,7 @@ export function removeCourse(id) {
   return courses.length < before;
 }
 
-/* ---------- Operaciones relacionales ---------- */
 
-/**
- * Inscribir alumno en curso (añade studentId al course.studentIds si no existe)
- * Devuelve el curso actualizado o null si no existe.
- */
 export function enrollStudentToCourse(courseId, studentId) {
   const courses = readCourses();
   const idx = courses.findIndex(c => c.id === courseId);
@@ -112,9 +93,7 @@ export function enrollStudentToCourse(courseId, studentId) {
   return courses[idx];
 }
 
-/**
- * Quitar alumno de curso
- */
+
 export function removeStudentFromCourse(courseId, studentId) {
   const courses = readCourses();
   const idx = courses.findIndex(c => c.id === courseId);
@@ -124,32 +103,22 @@ export function removeStudentFromCourse(courseId, studentId) {
   return courses[idx];
 }
 
-/**
- * Asignar profesor a curso (actualiza teacherId)
- */
+
 export function assignTeacherToCourse(courseId, teacherId) {
   return updateCourse(courseId, { teacherId });
 }
 
-/* ---------- Lectura avanzada ---------- */
 
-/**
- * Obtener curso por id (raw)
- */
 export function getCourseById(courseId) {
   const courses = readCourses();
   return courses.find(c => c.id === courseId) || null;
 }
 
-/**
- * Obtener curso "expandido" con objetos teacher y students si existen en storage.
- * Resultado: { ...course, teacher: {...}|null, students: [ {...} ], studentCount }
- */
+
 export function getCourseDetails(courseId) {
   const course = getCourseById(courseId);
   if (!course) return null;
 
-  // cargar colecciones auxiliares
   const rawTeachers = readCollection("teachers").length ? readCollection("teachers") : readCollection("profesores");
   const rawStudents = readCollection("students").length ? readCollection("students") : readCollection("alumnos");
 
