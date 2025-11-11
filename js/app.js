@@ -102,10 +102,11 @@ function renderView(hash) {
     try { initTrainersLogic(); } catch (err) { console.error("initTrainersLogic error:", err); }
   }
 
-  if (bHash === "#/admins") {
+  if (bHash === "#/admins" || bHash === "#/administrativos") {
     try { initAdminsLogic(); } catch (err) { console.error("initAdminsLogic error:", err); }
   }
 }
+
 
 function agregarLogicaDeLogin() {
   const form = document.getElementById("login-form");
