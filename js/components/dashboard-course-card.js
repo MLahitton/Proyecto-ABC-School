@@ -19,8 +19,7 @@ class DashboardCourseCard extends HTMLElement {
 
   _readCourses() {
     try {
-      const raw = localStorage.getItem("courses") || localStorage.getItem("cursos");
-      if (!raw) return [];
+      const raw = localStorage.getItem("courses") 
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];
     } catch (e) {
@@ -30,7 +29,7 @@ class DashboardCourseCard extends HTMLElement {
 
   _readTeachers() {
     try {
-      const raw = localStorage.getItem("teachers") || localStorage.getItem("profesores");
+      const raw = localStorage.getItem("teachers") 
       if (!raw) return [];
       const parsed = JSON.parse(raw);
       return Array.isArray(parsed) ? parsed : [];
@@ -53,7 +52,6 @@ class DashboardCourseCard extends HTMLElement {
       const t = teachers.find(x => String(x.id) === String(teacherId));
       if (t) return t.nombre || `${t.nombres || ""} ${t.apellidos || ""}`.trim() || t.name || "";
     }
-    // fallback: look for teacherName/docente/profesor in course
     const candidate = course.teacherName || course.docente || course.profesor || course.profesorName || "";
     if (candidate) return candidate;
     return "";

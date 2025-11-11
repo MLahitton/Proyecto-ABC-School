@@ -9,6 +9,7 @@ import { coursesEditView, initCoursesEditLogic } from "./views/courses-edit-view
 import { trainerView, initTrainersLogic } from "./views/trainer-view.js";
 import { adminView, initAdminsLogic } from "./views/admin-view.js";
 import "./components/course-card.js";
+import { leerDato } from "./helpers/storage.js";
 
 const routes = {
   "#/": homeView,
@@ -56,8 +57,8 @@ function renderView(hash) {
     agregarLogicaDeLogin();
   }
 
-  if (bHash === "#/students" || bHash === "#/alumnos") {
-    const input = document.getElementById("students-search") || document.getElementById("alumnos-search");
+  if (bHash === "#/students") {
+    const input = document.getElementById("students-search");
     if (input) {
       input.addEventListener("input", () => {
         const q = input.value.trim().toLowerCase();
@@ -71,11 +72,11 @@ function renderView(hash) {
     try { initStudentsListLogic(); } catch (err) { console.error("initStudentsListLogic error:", err); }
   }
 
-  if (bHash === "#/students/new" || bHash === "#/alumnos/new") {
+  if (bHash === "#/students/new") {
     try { initStudentsCreateLogic(); } catch (err) { console.error("initStudentsCreateLogic error:", err); }
   }
 
-  if (bHash === "#/courses" || bHash === "#/cursos") {
+  if (bHash === "#/courses") {
     const input = document.getElementById("courses-search");
     if (input) {
       input.addEventListener("input", () => {
@@ -89,7 +90,7 @@ function renderView(hash) {
     try { initCoursesListLogic(); } catch (err) { console.error("initCoursesListLogic error:", err); }
   }
 
-  if (bHash === "#/courses/new" || bHash === "#/crear-curso") {
+  if (bHash === "#/courses/new") {
     try { initCoursesCreateLogic(); } catch (err) { console.error("initCoursesCreateLogic error:", err); }
   }
 
@@ -97,11 +98,11 @@ function renderView(hash) {
     try { initCoursesEditLogic(); } catch (err) { console.error("initCoursesEditLogic error:", err); }
   }
 
-  if (bHash === "#/trainers" || bHash === "#/teachers") {
+  if (bHash === "#/trainers") {
     try { initTrainersLogic(); } catch (err) { console.error("initTrainersLogic error:", err); }
   }
 
-  if (bHash === "#/admins" || bHash === "#/administrativos") {
+  if (bHash === "#/admins") {
     try { initAdminsLogic(); } catch (err) { console.error("initAdminsLogic error:", err); }
   }
 }
@@ -113,7 +114,12 @@ function agregarLogicaDeLogin() {
       e.preventDefault();
       const usuario = form.usuario.value.trim();
       const password = form.password.value.trim();
-      if (usuario === "admin" && password === "1234") {
+      leerDato("administrativos");
+      const usuarioadmin = leerDato("administrativos");
+      const logAdmin=usuarioadmin.find(admin=>admin.email===usuario);
+
+      
+      if (logAdmin && logAdmin.password===password || usuario==="admin" && password==="1234" ) {
         localStorage.setItem("adminLogin", "true");
         location.hash = "#/dashboard";
       } else {

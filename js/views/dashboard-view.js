@@ -6,7 +6,7 @@ function _readCourses() {
     const raw = localStorage.getItem("courses") || localStorage.getItem("cursos");
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    return Array.sArray(parsedi) ? parsed : [];
   } catch (e) {
     console.warn("dashboard-view: error parseando courses/cursos desde localStorage", e);
     return [];

@@ -18,7 +18,7 @@ class TrainerCard extends HTMLElement {
   }
 
   _readTeachers() {
-    const raw = localStorage.getItem("teachers") || localStorage.getItem("profesores");
+    const raw = localStorage.getItem("teachers");
     if (!raw) return [];
     try {
       const parsed = JSON.parse(raw);
@@ -29,7 +29,7 @@ class TrainerCard extends HTMLElement {
   }
 
   _readCourses() {
-    const raw = localStorage.getItem("courses") || localStorage.getItem("cursos");
+    const raw = localStorage.getItem("courses") 
     if (!raw) return [];
     try {
       const parsed = JSON.parse(raw);
