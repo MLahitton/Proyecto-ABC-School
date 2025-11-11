@@ -116,7 +116,7 @@ function agregarLogicaDeLogin() {
       const usuario = form.usuario.value.trim();
       const password = form.password.value.trim();
       leerDato("administrativos");
-      const usuarioadmin = leerDato("administrativos");
+      const usuarioadmin = leerDato("admins");
       const logAdmin=usuarioadmin.find(admin=>admin.email===usuario);
 
       
