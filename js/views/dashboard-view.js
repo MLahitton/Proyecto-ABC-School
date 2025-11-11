@@ -1,38 +1,68 @@
-import {mostrarBarraNavegacion} from "../helpers/navBar.js"
+import "../components/dashboard-course-card.js";
+import { mostrarBarraNavegacion } from "../helpers/navBar.js";
 
-const cursos = [
-  {
-    nombre: "Matemáticas",
-    profesor: "Prof. Juan Pérez",
-    alumnos: ["Ana", "Luis", "Pedro","camilo","tomas","ximena"],
-    modulos: ["Álgebra", "Geometría"]
-  },
-  {
-    nombre: "Lengua y Literatura",
-    profesor: "Prof. Marta Gómez",
-    alumnos: ["Carlos", "Sofía"],
-    modulos: ["Gramática", "Lectura"]
+function _readCourses() {
+  try {
+    const raw = localStorage.getItem("courses") || localStorage.getItem("cursos");
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (e) {
+    console.warn("dashboard-view: error parseando courses/cursos desde localStorage", e);
+    return [];
   }
-];
-export  function dashboardview(){
-    return `
-    ${mostrarBarraNavegacion()}
-    <main>
-      <section>
+}
+
+export function dashboardview() {
+  return `
+    ${mostrarBarraNavegacion ? mostrarBarraNavegacion() : ""}
+    <main style="padding:1rem;">
+      <section style="max-width:1100px; margin:0 auto;">
         <h2>Cursos activos</h2>
-        <div class="cursos-list">
-          ${cursos.map(curso => `
-            <div class="curso-item">
-              <h3>${curso.nombre}</h3>
-              <p><strong>Profesor:</strong> ${curso.profesor}</p>
-              <p><strong>Alumnos inscritos:</strong> ${curso.alumnos.length}</p>
-              <ul>${curso.alumnos.map(alumno => `<li>${alumno}</li>`).join("")}</ul>
-              <p><strong>Módulos:</strong></p>
-              <ul>${curso.modulos.map(mod => `<li>${mod}</li>`).join("")}</ul>
-            </div>
-          `).join("")}
-        </div>
+        <div id="dashboard-courses-container" class="cursos-list" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:1rem;"></div>
       </section>
     </main>
   `;
+}
+
+export function initDashboardLogic() {
+  const container = document.getElementById("dashboard-courses-container");
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  let courses = [];
+  try {
+    courses = _readCourses();
+  } catch (e) {
+    courses = [];
+  }
+
+  if (!Array.isArray(courses) || courses.length === 0) {
+    container.innerHTML = `<p class="no-courses">No hay cursos registrados en localStorage.</p>`;
+    return;
+  }
+
+  courses.forEach(c => {
+    const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.flexDirection = "column";
+    wrapper.style.gap = "8px";
+
+    const card = document.createElement("dashboard-course-card");
+    if (c && c.id) {
+      card.setAttribute("course-id", c.id);
+    } else {
+      card.course = {
+        id: c.id || "",
+        nombre: c.nombre || c.name || "",
+        profesor: c.profesor || c.teacherName || c.docente || "",
+        alumnos: c.alumnos || c.students || [],
+        modulos: c.modulos || c.modules || []
+      };
+    }
+
+    wrapper.appendChild(card);
+    container.appendChild(wrapper);
+  });
 }

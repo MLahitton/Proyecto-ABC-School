@@ -1,4 +1,5 @@
-import {mostrarBarraNavegacion} from "../helpers/navBar.js"
+import { mostrarBarraNavegacion } from "../helpers/navBar.js";
+import { removeStudent } from "../helpers/students-storage.js";
 
 function getStudentsFromStorage() {
   const rawStudents = localStorage.getItem("students") || localStorage.getItem("alumnos");
@@ -44,7 +45,7 @@ function getStudentsFromStorage() {
   if (raw) {
     try {
       const cursosArr = JSON.parse(raw);
-      const studentsMap = {}; // 
+      const studentsMap = {};
 
       if (Array.isArray(cursosArr)) {
         cursosArr.forEach(c => {
@@ -68,6 +69,11 @@ function getStudentsFromStorage() {
   return [];
 }
 
+function _escapeHtml(str) {
+  if (!str && str !== 0) return "";
+  return String(str).replace(/[&<>"']/g, (m) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+}
+
 export function studentsView() {
   const students = getStudentsFromStorage();
 
@@ -82,14 +88,54 @@ export function studentsView() {
 
       <section class="students-list">
         ${students.length === 0 ? `<p class="no-students">No hay alumnos registrados.</p>` : students.map((student, index) => `
-          <article class="student-item" data-index="${index}">
-            <h3 class="student-name">${student.name}</h3>
-            ${student.document ? `<p class="student-document"><strong>Documento:</strong> ${student.document}</p>` : ''}
-            ${student.dob ? `<p class="student-dob"><strong>Fecha Nac.:</strong> ${student.dob}</p>` : ''}
-            <p class="student-courses"><strong>Cursos:</strong> ${student.cursos && student.cursos.length ? student.cursos.join(', ') : '—'}</p>
+          <article class="student-item" data-index="${index}" data-id="${student.id || ""}" data-name="${_escapeHtml(student.name || "")}">
+            <h3 class="student-name">${_escapeHtml(student.name)}</h3>
+            ${student.document ? `<p class="student-document"><strong>Documento:</strong> ${_escapeHtml(student.document)}</p>` : ''}
+            ${student.dob ? `<p class="student-dob"><strong>Fecha Nac.:</strong> ${_escapeHtml(student.dob)}</p>` : ''}
+            <p class="student-courses"><strong>Cursos:</strong> ${student.cursos && student.cursos.length ? _escapeHtml(student.cursos.join(', ')) : '—'}</p>
+            <div class="item-actions" style="margin-top:0.5rem;">
+              <button class="btn btn-delete-student" data-id="${_escapeHtml(student.id || "")}" data-name="${_escapeHtml(student.name || "")}">Eliminar</button>
+            </div>
           </article>
         `).join('')}
       </section>
     </main>
   `;
+}
+
+export function initStudentsListLogic() {
+  document.querySelectorAll(".btn-delete-student").forEach(btn => {
+    btn.removeEventListener && btn.removeEventListener("click", () => {});
+    btn.addEventListener("click", (e) => {
+      const id = btn.getAttribute("data-id");
+      const name = btn.getAttribute("data-name");
+      const identifier = id && id.trim() ? id.trim() : (name && name.trim() ? name.trim() : null);
+      if (!identifier) return;
+      const confirmed = confirm("¿Estás seguro que deseas eliminar este alumno?");
+      if (!confirmed) return;
+      try {
+        const ok = removeStudent(identifier);
+        if (ok) {
+          window.dispatchEvent(new Event("hashchange"));
+        } else {
+          alert("No se encontró el alumno para eliminar.");
+        }
+      } catch (err) {
+        console.error("Error eliminando alumno:", err);
+        alert("Ocurrió un error al eliminar el alumno.");
+      }
+    });
+  });
+
+  const input = document.getElementById("students-search");
+  if (input) {
+    input.addEventListener("input", () => {
+      const q = input.value.trim().toLowerCase();
+      document.querySelectorAll(".student-item").forEach(item => {
+        const nombreEl = item.querySelector(".student-name");
+        const nombre = nombreEl ? nombreEl.textContent.toLowerCase() : "";
+        item.style.display = nombre.includes(q) ? "" : "none";
+      });
+    });
+  }
 }

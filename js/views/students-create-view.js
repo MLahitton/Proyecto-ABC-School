@@ -70,15 +70,7 @@ export function initStudentsCreateLogic() {
       showMessage("El documento debe contener solo números.", "error");
       return;
     }
-    const todayStr = new Date().toISOString().slice(0, 10);
-    if (!dob) {
-      showMessage("La fecha de nacimiento es obligatoria.", "error");
-      return;
-    }
-    if (dob > todayStr) {
-      showMessage("La fecha de nacimiento no puede ser en el futuro.", "error");
-      return;
-    }
+
 
     const id = generateStudentId(name, document);
 

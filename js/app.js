@@ -1,11 +1,13 @@
-import { homeView } from "./views/home-view.js";
+import { homeView, initHomeLogic } from "./views/home-view.js";
 import { loginView } from "./views/login-view.js";
-import { dashboardview } from "./views/dashboard-view.js";
-import { studentsView } from "./views/students-view.js";
+import { dashboardview, initDashboardLogic } from "./views/dashboard-view.js";
+import { studentsView, initStudentsListLogic } from "./views/students-view.js";
 import { studentsCreateView, initStudentsCreateLogic } from "./views/students-create-view.js";
 import { coursesView, initCoursesListLogic } from "./views/courses-view.js";
 import { coursesCreateView, initCoursesCreateLogic } from "./views/courses-create-view.js";
 import { coursesEditView, initCoursesEditLogic } from "./views/courses-edit-view.js";
+import { trainerView, initTrainersLogic } from "./views/trainer-view.js";
+import { adminView, initAdminsLogic } from "./views/admin-view.js";
 import "./components/course-card.js";
 
 const routes = {
@@ -23,10 +25,13 @@ const routes = {
   "#/cursos": coursesView,
   "#/courses/new": coursesCreateView,
   "#/crear-curso": coursesCreateView,
-  "#/courses/edit": coursesEditView, 
-  // más rutas...
+  "#/courses/edit": coursesEditView,
+  // trainers 
+  "#/trainers": trainerView,
+  "#/teachers": trainerView,
+  "#/admins": adminView,
+  "#/administrativos": adminView
 };
-
 
 function baseHash(hash) {
   if (!hash) return hash;
@@ -35,10 +40,17 @@ function baseHash(hash) {
 }
 
 function renderView(hash) {
-  const bHash = baseHash(hash);
+  const bHash = baseHash(hash); 
   const view = routes[bHash] || (() => "<h2>404: Página no encontrada</h2>");
   document.getElementById("app").innerHTML = view();
 
+  if (bHash === "#/" || bHash === "#/home") {
+    try { initHomeLogic(); } catch (err) { console.error("initHomeLogic error:", err); }
+  }
+
+  if (bHash === "#/dashboard") {
+    try { initDashboardLogic(); } catch (err) { console.error("initDashboardLogic error:", err); }
+  }
 
   if (bHash === "#/login") {
     agregarLogicaDeLogin();
@@ -56,10 +68,11 @@ function renderView(hash) {
         });
       });
     }
+    try { initStudentsListLogic(); } catch (err) { console.error("initStudentsListLogic error:", err); }
   }
 
   if (bHash === "#/students/new" || bHash === "#/alumnos/new") {
-    initStudentsCreateLogic();
+    try { initStudentsCreateLogic(); } catch (err) { console.error("initStudentsCreateLogic error:", err); }
   }
 
   if (bHash === "#/courses" || bHash === "#/cursos") {
@@ -73,18 +86,25 @@ function renderView(hash) {
         });
       });
     }
-    initCoursesListLogic();
+    try { initCoursesListLogic(); } catch (err) { console.error("initCoursesListLogic error:", err); }
   }
 
   if (bHash === "#/courses/new" || bHash === "#/crear-curso") {
-    initCoursesCreateLogic();
+    try { initCoursesCreateLogic(); } catch (err) { console.error("initCoursesCreateLogic error:", err); }
   }
 
   if (bHash === "#/courses/edit") {
-    initCoursesEditLogic();
+    try { initCoursesEditLogic(); } catch (err) { console.error("initCoursesEditLogic error:", err); }
+  }
+
+  if (bHash === "#/trainers" || bHash === "#/teachers") {
+    try { initTrainersLogic(); } catch (err) { console.error("initTrainersLogic error:", err); }
+  }
+
+  if (bHash === "#/admins" || bHash === "#/administrativos") {
+    try { initAdminsLogic(); } catch (err) { console.error("initAdminsLogic error:", err); }
   }
 }
-
 
 function agregarLogicaDeLogin() {
   const form = document.getElementById("login-form");
