@@ -30,7 +30,18 @@ export function homeView() {
     <div class="banner">
       <div class="text-banner">
         <h3>Nuestra historia</h3>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit..."</p>
+        <p>En la Institución Educativa ABC creemos que cada estudiante guarda en su interior un potencial infinito.
+Un sueño, una idea o una chispa capaz de transformar su vida y el mundo que lo rodea.
+
+Aquí, la educación no se trata solo de aprender contenidos, sino de descubrir propósitos.
+De mirar más allá del aula y entender que el conocimiento tiene poder cuando se comparte, se vive y se aplica con pasión.
+
+Cada día acompañamos a nuestros estudiantes en un camino de crecimiento, curiosidad y superación.
+Les enseñamos a pensar, pero también a sentir.
+A liderar con empatía, a construir con creatividad y a avanzar con confianza hacia el futuro que elijan.
+
+Porque educar no es llenar la mente: es encender el alma.
+Y en la Institución Educativa ABC lo hacemos juntos — paso a paso, logro a logro — formando seres humanos que inspiran, transforman y dejan huella."</p>
       </div>        
     </div>
 
