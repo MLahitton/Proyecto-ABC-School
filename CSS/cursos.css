@@ -75,6 +75,16 @@ nav .menu a:hover, nav .menu a:focus { background: rgba(14,165,233,0.06); }
 
 nav .login { margin-left:auto; }
 nav .login a { color: var(--primary); text-decoration:none; font-weight:700; }
+.home{
+  background-image: url(../assets/Logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 120px;
+  height: 120px;
+  display: inline-block;
+  text-indent: -9999px;
+}
 
 /* --------------------
    Hero / Banner
@@ -278,3 +288,4 @@ course-card {
 .hidden { display:none !important }
 .mb-1 { margin-bottom:0.5rem }
 .mt-1 { margin-top:0.5rem }
+

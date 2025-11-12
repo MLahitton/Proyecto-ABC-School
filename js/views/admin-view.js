@@ -71,7 +71,6 @@ export function initAdminsLogic() {
       const password = document.getElementById("admin-password").value;
       try {
         addAdmin({ nombres, apellidos, email, password });
-        // clear
         document.getElementById("admin-nombres").value = "";
         document.getElementById("admin-apellidos").value = "";
         document.getElementById("admin-email").value = "";

@@ -68,7 +68,6 @@ export function initTrainersLogic() {
     });
   });
 
-  // form submit
   const form = document.getElementById("trainer-create-form");
   if (form) {
     form.removeEventListener && form.removeEventListener("submit", () => {});
@@ -113,7 +112,6 @@ export function initTrainersLogic() {
     });
   }
 
-  // search (filter)
   const input = document.getElementById("trainers-search");
   if (input) {
     input.removeEventListener && input.removeEventListener("input", () => {});

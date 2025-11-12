@@ -10,6 +10,9 @@ import { trainerView, initTrainersLogic } from "./views/trainer-view.js";
 import { adminView, initAdminsLogic } from "./views/admin-view.js";
 import "./components/course-card.js";
 import { leerDato } from "./helpers/storage.js";
+import { homeCoursesView, initHomeCoursesLogic } from "./views/home-courses-view.js";
+import { homeTrainerView, initHomeTrainerLogic } from "./views/home-trainer-view.js";
+import { contactView } from "./views/contact-view.js";
 
 const routes = {
   "#/": homeView,
@@ -31,7 +34,14 @@ const routes = {
   "#/trainers": trainerView,
   "#/teachers": trainerView,
   "#/admins": adminView,
-  "#/administrativos": adminView
+  "#/administrativos": adminView,
+  // vistas de home
+  "#/home-courses": homeCoursesView,
+  "#/cursos-home": homeCoursesView,
+  "#/home-trainers": homeTrainerView,
+  "#/docentes-home": homeTrainerView,
+  // contacto
+  '#/contact': contactView
 };
 
 function baseHash(hash) {
@@ -47,6 +57,14 @@ function renderView(hash) {
 
   if (bHash === "#/" || bHash === "#/home") {
     try { initHomeLogic(); } catch (err) { console.error("initHomeLogic error:", err); }
+  }
+
+  if (bHash === "#/home-courses" || bHash === "#/cursos-home") {
+    try { initHomeCoursesLogic(); } catch (err) { console.error("initHomeCoursesLogic error:", err); }
+  }
+
+  if (bHash === "#/home-trainers" || bHash === "#/docentes-home") {
+    try { initHomeTrainerLogic(); } catch (err) { console.error("initHomeTrainerLogic error:", err); }
   }
 
   if (bHash === "#/dashboard") {

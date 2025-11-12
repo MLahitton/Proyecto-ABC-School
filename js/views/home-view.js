@@ -1,12 +1,16 @@
 import "../components/course-card.js";
+import "../components/home-course-card.js";
+import "../components/home-trainer-card.js";
 
 const profesores = [
+  { nombre: "Esto se mostrara", especialidad: "si no hay cursos inscritos" },
   { nombre: "María López", especialidad: "Matemáticas" },
   { nombre: "Juan Pérez", especialidad: "Ciencias" },
   { nombre: "Sofía García", especialidad: "Historia" }
 ];
 
 const cursosSimulados = [
+  { id: "c_sim_1", nombre: "Esto se mostrara", docente: "si no hay", modules: [" si no hay cursos incritos"] },
   { id: "c_sim_1", nombre: "Álgebra Básica", docente: "María López", modules: ["Álgebra I", "Ecuaciones"] },
   { id: "c_sim_2", nombre: "Química 101", docente: "Juan Pérez", modules: ["Materia", "Reacciones"] },
   { id: "c_sim_3", nombre: "Historia Antigua", docente: "Sofía García", modules: ["Antiguo Oriente", "Grecia"] }
@@ -17,9 +21,9 @@ export function homeView() {
     <nav>
       <img src="assets/Logo.png" class="logo" alt="Logo">
       <div class="menu">
-        <a href="#">Poner los href</a>
-        <a href="#/courses">Courses</a>
-        <a href="#/teachers">Trainers</a>
+        <a href="#/home">Home</a>
+        <a href="#/home-courses">Courses</a>
+        <a href="#/home-trainers">Trainers</a>
         <a href="#/contact">Contact</a>
       </div>
       <div class="login">
@@ -79,25 +83,25 @@ export function initHomeLogic() {
   const isStoredArray = Array.isArray(stored) && stored.length > 0;
   const coursesToRender = isStoredArray ? stored : cursosSimulados;
 
+
   coursesToRender.forEach(c => {
-    const card = document.createElement("course-card");
+    const card = document.createElement("home-course-card");
+
 
     if (isStoredArray) {
-      if (c && c.id) {
-        card.setAttribute("course-id", c.id);
-      } else {
-        card.course = {
-          id: c.id || "",
-          nombre: c.nombre || c.name || "",
-          modules: c.modules || c.modulos || []
-        };
+      try {
+        card.course = c;
+      } catch (err) {
+
       }
+      if (c && c.id) card.setAttribute("course-id", c.id);
     } else {
       card.course = {
         id: c.id || "",
         nombre: c.nombre || c.name || "",
         modules: c.modules || c.modulos || []
       };
+      if (c.id) card.setAttribute("course-id", c.id);
     }
 
     const wrapper = document.createElement("div");
@@ -105,4 +109,37 @@ export function initHomeLogic() {
     wrapper.appendChild(card);
     container.appendChild(wrapper);
   });
+
+
+  const profsContainer = document.querySelector(".grid-profesores");
+  if (profsContainer) {
+    profsContainer.innerHTML = "";
+
+    let storedTrainers = null;
+    try {
+      const r1 = localStorage.getItem("trainers") || localStorage.getItem("teachers") || localStorage.getItem("docentes");
+      storedTrainers = r1 ? JSON.parse(r1) : null;
+    } catch (e) {
+      storedTrainers = null;
+    }
+
+    const hasStoredTrainers = Array.isArray(storedTrainers) && storedTrainers.length > 0;
+    const trainersToRender = hasStoredTrainers ? storedTrainers : profesores;
+
+    trainersToRender.forEach(t => {
+      const card = document.createElement("home-trainer-card");
+      try {
+        card.trainer = {
+          id: t.id || t.codigo || "",
+          nombre: t.nombre || t.nombres || `${t.nombres || ""} ${t.apellidos || ""}`.trim() || t.name || "",
+          especialidad: t.especialidad || t.area || t.areaAcademica || t.specialty || "",
+          email: t.email || t.correo || ""
+        };
+      } catch (err) {
+      }
+      if (t.id) card.setAttribute("trainer-id", String(t.id));
+      else if (t.codigo) card.setAttribute("trainer-id", String(t.codigo));
+      profsContainer.appendChild(card);
+    });
+  }
 }

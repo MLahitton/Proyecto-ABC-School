@@ -2,7 +2,7 @@
 export function mostrarBarraNavegacion() {
     return  `
       <nav class="navbar-dashboard">
-        <img src="../../Assets/Logo.png" alt="Logo" class="logo-navbar">
+        <a href="#/home" class="home">home<a>
         <div class="navbar-links">
           <a href="#/dashboard">Informacion general</a>
           <a href="#/students">Alumnos</a>

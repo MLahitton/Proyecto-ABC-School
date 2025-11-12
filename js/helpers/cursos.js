@@ -1,6 +1,5 @@
 import { leerDato, guardarDato } from './storage.js';
 
-// Cursos
 export function getCursos() {
   return leerDato('cursos');
 }
@@ -40,7 +39,6 @@ export function eliminarCurso(id) {
   saveCursos(cursos);
 }
 
-// Módulos
 export function agregarModulo(cursoId, { codigo, nombre, descripcion }) {
   const cursos = getCursos();
   const curso = cursos.find(c => c.id === cursoId);
@@ -76,7 +74,6 @@ export function eliminarModulo(cursoId, moduloId) {
   saveCursos(cursos);
 }
 
-// Lecciones
 export function agregarLeccion(cursoId, moduloId, { titulo, intensidad, contenido, multimedia }) {
   const cursos = getCursos();
   const curso = cursos.find(c => c.id === cursoId);

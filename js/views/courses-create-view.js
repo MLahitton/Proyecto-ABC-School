@@ -78,7 +78,6 @@ export function initCoursesCreateLogic() {
   const messageEl = document.getElementById("course-message");
   const cancelBtn = document.getElementById("course-cancel");
 
-  // Poblar selects con datos desde localStorage
   const teachers = readTeachersFromStorage();
   teachers.forEach(t => {
     const id = t.id || (t.nombre ? t.nombre : t.name || "");
