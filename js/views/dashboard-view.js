@@ -58,7 +58,8 @@ export function initDashboardLogic() {
         nombre: c.nombre || c.name || "",
         profesor: c.profesor || c.teacherName || c.docente || "",
         alumnos: c.alumnos || c.students || [],
-        modulos: c.modulos || c.modules || []
+        modulos: c.modulos || c.modules || [],
+        lecciones:c.lecciones || c.lectures || [],
       };
     }
 

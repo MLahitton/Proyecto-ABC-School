@@ -55,6 +55,10 @@ export function coursesCreateView() {
             <label for="course-modules">Módulos (separados por coma)</label><br>
             <input id="course-modules" name="modules" type="text" placeholder="Ej: Álgebra, Geometría">
           </div>
+          <div>
+            <label for="course-lectures">Lecciones (separados por coma)</label><br>
+            <input id="course-lectures" name="lectures" type="text" placeholder="Ej: Lineal, Graficas, Matlab">
+          </div>
 
           <div style="margin-top: 1rem;">
             <button type="submit" id="course-submit">Crear curso</button>
@@ -116,6 +120,9 @@ export function initCoursesCreateLogic() {
     const selectedStudentIds = Array.from(studentsSelect.selectedOptions).map(o => o.value).filter(Boolean);
     const modulesRaw = (form.modules.value || "").trim();
     const modules = modulesRaw ? modulesRaw.split(",").map(m => m.trim()).filter(Boolean) : [];
+    const lecturesRaw = (form.lectures.value || "" ).trim();
+    const lectures= lecturesRaw ? lecturesRaw.split(",").map(l => l.trim()).filter(Boolean) : []; 
+    
 
     // Validaciones
     if (!nombre) {
@@ -128,7 +135,8 @@ export function initCoursesCreateLogic() {
       nombre,
       teacherId: teacherId || null,
       studentIds: selectedStudentIds,
-      modules
+      modules,
+      lectures
     };
 
     try {

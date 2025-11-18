@@ -4,16 +4,16 @@ import "../components/home-trainer-card.js";
 
 const profesores = [
   { nombre: "Esto se mostrara", especialidad: "si no hay cursos inscritos" },
-  { nombre: "María López", especialidad: "Matemáticas" },
-  { nombre: "Juan Pérez", especialidad: "Ciencias" },
-  { nombre: "Sofía García", especialidad: "Historia" }
+  { nombre: "Esto se mostrara", especialidad: "si no hay cursos inscritos" },
+  { nombre: "Esto se mostrara", especialidad: "si no hay cursos inscritos" },
+  { nombre: "Esto se mostrara", especialidad: "si no hay cursos inscritos" }
 ];
 
 const cursosSimulados = [
   { id: "c_sim_1", nombre: "Esto se mostrara", docente: "si no hay", modules: [" si no hay cursos incritos"] },
-  { id: "c_sim_1", nombre: "Álgebra Básica", docente: "María López", modules: ["Álgebra I", "Ecuaciones"] },
-  { id: "c_sim_2", nombre: "Química 101", docente: "Juan Pérez", modules: ["Materia", "Reacciones"] },
-  { id: "c_sim_3", nombre: "Historia Antigua", docente: "Sofía García", modules: ["Antiguo Oriente", "Grecia"] }
+  { id: "c_sim_1", nombre: "Esto se mostrara", docente: "María López", modules: ["si no hay cursos incritos"] },
+  { id: "c_sim_2", nombre: "Esto se mostrara", docente: "Juan Pérez", modules: ["si no hay cursos incritos"] },
+  { id: "c_sim_3", nombre: "Esto se mostrara", docente: "Sofía García", modules: ["si no hay cursos incritos"] }
 ];
 
 export function homeView() {
