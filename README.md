@@ -212,4 +212,4 @@ Para preguntas, sugerencias o reportar problemas:
 
 ---
 
-Desarrollado con ❤️ por Manuel Lahitton
+Desarrollado con ❤️ por Manuel Lahitton holis
