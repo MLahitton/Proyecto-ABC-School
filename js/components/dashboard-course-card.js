@@ -71,6 +71,11 @@ class DashboardCourseCard extends HTMLElement {
     if (!Array.isArray(arr)) return [];
     return arr.map(m => (m || "").toString()).filter(Boolean);
   }
+  _normalizeLectures(arr){
+    if (!Array.isArray(arr)) return[];
+    return arr.map(l=>(l || "").toString()).filter(Boolean);
+  }
+
 
   _escapeHtml(str) {
     if (!str && str !== 0) return "";
@@ -90,6 +95,8 @@ class DashboardCourseCard extends HTMLElement {
     const alumnos = this._normalizeStudents(alumnosArr);
     const modulosArr = course ? (Array.isArray(course.modulos) ? course.modulos.slice() : (Array.isArray(course.modules) ? course.modules.slice() : [])) : [];
     const modulos = this._normalizeModules(modulosArr);
+    const lectureArr = course ? (Array.isArray(course.lectures) ? course.lectures.slice(): []):[];
+    const lectures = this._normalizeLectures(lectureArr)
 
     const html = `
       <style>
@@ -119,6 +126,14 @@ class DashboardCourseCard extends HTMLElement {
             <ul>${modulos.map(m => `<li>${this._escapeHtml(m)}</li>`).join("")}</ul>
           </div>
         ` : `<div class="modules"><strong>Módulos:</strong> —</div>`}
+        ${lectures && lectures.length ? ` 
+          <div class = "modules">
+            <strong> Lecciones:</strong>
+            <ul>${lectures.map(l=> `<li>${this._escapeHtml(l)}</li>`).join("")}</ul>)}
+            </div>
+          `: `<div class="modules"><strong>Módulos:</strong> —</div>`}
+
+        }
       </article>
     `;
     this.shadowRoot.innerHTML = html;
